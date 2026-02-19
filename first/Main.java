@@ -1,12 +1,23 @@
 // import packages.*;
+import java.util.Scanner;
+
 import packages.functions.TabulatedFunction;
 
 public class Main {
     public static void main(String[] args) {
-        double[] values = {1.0, 2.0, 3.0, 4.0, 5.0};
+        Scanner scanf = new Scanner(System.in);
+        
+        double[] values = new double[5];
+        for (int i = 0; i < values.length - 1; i++) {
+            System.out.print("Введите элемент[" + i + "]: ");
+            values[i] = scanf.nextDouble();
+        }
+
         TabulatedFunction tabf = new TabulatedFunction(0, 10.0, values);
         System.out.println(tabf);
-        System.out.println(tabf.getFunctionalvalue(3));
+
+
+        scanf.close();
     }
 }
 
