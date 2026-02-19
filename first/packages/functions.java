@@ -35,6 +35,14 @@ public class functions {
                 points.add(p);
             }
         }
+
+        public TabulatedFunction(double leftX, double rightX, double[] values) {
+            double step = (rightX - leftX) / (values.length - 1);
+            for (int i = 0; i < values.length; i++) {
+                FunctionPoint p = new FunctionPoint(leftX + i * step, values[i]);
+                points.add(p);
+            }
+        }
         
         @Override
         public String toString() {
