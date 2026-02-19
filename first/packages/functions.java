@@ -20,11 +20,13 @@ public class functions {
             x = 0;
             y = 0;
         }
+
         @Override
         public String toString() {
             return String.format("(%.2f; %.2f)", x, y);
         }
     }
+    
     public static class TabulatedFunction {
         ArrayList<FunctionPoint> points = new ArrayList<>();
 
@@ -42,6 +44,20 @@ public class functions {
                 FunctionPoint p = new FunctionPoint(leftX + i * step, values[i]);
                 points.add(p);
             }
+        }
+
+        public double getleftDomainBorder() {
+            FunctionPoint lefB = points.get(0);
+            return lefB.x;
+        }
+
+        public double getRightDomainBorder() {
+            FunctionPoint rightB = points.get(points.size() - 1);
+            return rightB.x;
+        }
+
+        public double getFunctionalvalue(double x){
+            
         }
         
         @Override
