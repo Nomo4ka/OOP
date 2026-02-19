@@ -3,8 +3,16 @@ package packages;
 import java.util.ArrayList;
 
 public class functions {
-    public static class FunctionPoint {
+    protected static class FunctionPoint {
         private double x, y;
+        
+        public double getX() {
+            return x;
+        }
+
+        public double getY() {
+            return y;
+        }
 
         FunctionPoint(double _x, double _y) {
             x = _x;
@@ -29,8 +37,11 @@ public class functions {
     
     public static class TabulatedFunction {
         ArrayList<FunctionPoint> points = new ArrayList<>();
+        private double leftX_, rightX_;
 
         public TabulatedFunction(double leftX, double rightX, int pointsCount) {
+            leftX_ = leftX;
+            rightX_ = rightX;
             double step = (rightX - leftX) / (pointsCount - 1);
             for (int i = 0; i < pointsCount; i++) {
                 FunctionPoint p = new FunctionPoint(leftX + i * step, 0);
@@ -39,6 +50,8 @@ public class functions {
         }
 
         public TabulatedFunction(double leftX, double rightX, double[] values) {
+            leftX_ = leftX;
+            rightX_ = rightX;
             double step = (rightX - leftX) / (values.length - 1);
             for (int i = 0; i < values.length; i++) {
                 FunctionPoint p = new FunctionPoint(leftX + i * step, values[i]);
@@ -47,17 +60,25 @@ public class functions {
         }
 
         public double getleftDomainBorder() {
-            FunctionPoint lefB = points.get(0);
-            return lefB.x;
+            return points.get(0).x;
         }
 
         public double getRightDomainBorder() {
-            FunctionPoint rightB = points.get(points.size() - 1);
-            return rightB.x;
+            return points.get(points.size() - 1).x;
         }
 
         public double getFunctionalvalue(double x){
-            
+            if (x > leftX_ && x < rightX_) {
+                for (int i = 0; i < points.size() - 1; i++) {
+                    FunctionPoint p1 = points.get(i);
+                    FunctionPoint p2 = points.get(i + 1);
+                    if (x > p1.getX() && x < p2.getX()) {
+                        double t = (x - p1.getX()) / (p2.getX() - p1.getX());
+                        return p1.getY() + t * (p2.getY() - p1.getY());
+                    }
+                }
+            }
+            return Double.NaN;
         }
         
         @Override
