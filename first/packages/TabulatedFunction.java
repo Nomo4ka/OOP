@@ -12,11 +12,12 @@ public class TabulatedFunction {
         leftX_ = leftX;
         rightX_ = rightX;
         pointsCount_ = pointsCount;
+        
         double step = (rightX - leftX) / (pointsCount - 1);
         for (int i = 0; i < pointsCount_; i++) {
             FunctionPoint p = new FunctionPoint(leftX + i * step, 0);
             points[i] = p;
-        }
+        } 
     }
 
     public TabulatedFunction(double leftX, double rightX, double[] values) {
