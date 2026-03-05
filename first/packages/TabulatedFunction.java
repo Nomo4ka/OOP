@@ -40,17 +40,17 @@ public class TabulatedFunction {
     }
 
     public double getRightDomainBorder() {
-        return points[points.length - 1].x;
+        return points[pointsCount_ - 1].x;
     }
 
     public double getFunctionalvalue(double x) {
         if (x >= leftX_ && x <= rightX_) {
-            for (int i = 0; i < points.length - 1; i++) {
+            for (int i = 0; i < pointsCount_ - 1; i++) {
                 FunctionPoint p1 = points[i];
                 FunctionPoint p2 = points[i + 1];
                 if (x >= p1.x && x <= p2.x) {
                     double t = (x - p1.x) / (p2.x - p1.x);
-                    return p1.y + t * (p2.x - p1.x);
+                    return p1.y + t * (p2.y - p1.y);
                 }
             }
         }
@@ -67,15 +67,15 @@ public class TabulatedFunction {
     }
 
     public void setPoint(int index, FunctionPoint point) {
-        if (index < 0 || index >= points.length) {
+        if (index < 0 || index >= pointsCount_) {
             throw new IndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        if (index > 0 && point.x <= points[index - 1].x) {
+        if (index > 0 && point.x <= points[pointsCount_ - 1].x) {
             throw new IllegalArgumentException("Точка должна быть больше предыдущей!");
         }
 
-        if (index < points.length - 1 && point.x > points[index + 1].x) {
+        if (index < pointsCount_ - 1 && point.x > points[index + 1].x) {
             throw new IllegalArgumentException("Точка должна быть меньше предыдущей!");
         }
 
@@ -87,7 +87,7 @@ public class TabulatedFunction {
         }
 
         if (index == points.length - 1) {
-            rightX_ = points[points.length - 1].x;
+            rightX_ = points[pointsCount_ - 1].x;
         }
     }
     
@@ -97,7 +97,7 @@ public class TabulatedFunction {
     }
 
     public void setPointX(int index, double x) {
-        if (index < 0 || index >= points.length) {
+        if (index < 0 || index >= pointsCount_) {
             throw new IndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
@@ -105,7 +105,7 @@ public class TabulatedFunction {
             throw new IllegalArgumentException("x должен быть больше предыдущей точки!");
         }
 
-        if (index < points.length - 1 && x >= points[index + 1].x) {
+        if (index < pointsCount_ - 1 && x >= points[index + 1].x) {
             throw new IllegalArgumentException("x должен быть меньше следующей точки!");
         }
 
@@ -116,8 +116,8 @@ public class TabulatedFunction {
         if (index == 0) {
             leftX_ = points[0].x;
         }
-        if (index == points.length - 1) {
-            rightX_ = points[points.length - 1].x;
+        if (index == pointsCount_ - 1) {
+            rightX_ = points[pointsCount_ - 1].x;
         }
     }
 
