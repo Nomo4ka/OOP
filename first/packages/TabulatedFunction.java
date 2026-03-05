@@ -10,7 +10,7 @@ public class TabulatedFunction {
         leftX_ = leftX;
         rightX_ = rightX;
         pointsCount_ = pointsCount;
-        points = new FunctionPoint[pointsCount];
+        points = new FunctionPoint[pointsCount_];
 
         double step = (rightX - leftX) / (pointsCount - 1);
         for (int i = 0; i < pointsCount_; i++) {
@@ -23,6 +23,7 @@ public class TabulatedFunction {
         leftX_ = leftX;
         rightX_ = rightX;
         pointsCount_ = values.length;
+        points = new FunctionPoint[pointsCount_];
 
         double step = (rightX - leftX) / (values.length - 1);
         for (int i = 0; i < pointsCount_; i++) {
