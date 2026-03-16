@@ -1,4 +1,4 @@
-package packages;
+package packages2;
 
 public class FunctionPoint {
     protected double x, y;
