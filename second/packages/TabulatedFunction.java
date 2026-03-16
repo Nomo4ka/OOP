@@ -155,7 +155,7 @@ public class TabulatedFunction {
         System.arraycopy(points, index, points, index + 1, pointsCount_ - index);
 
         if (index < pointsCount_ && points[index].x == point.x) {
-            points[index] = point; 
+            points[index] = point; // замена существующей
             return;
         }
         points[index] = point;
