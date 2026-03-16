@@ -68,7 +68,7 @@ public class TabulatedFunction {
 
     public void setPoint(int index, FunctionPoint point) {
         if (index < 0 || index >= pointsCount_) {
-            throw new IndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
         if (index > 0 && point.x <= points[pointsCount_ - 1].x) {
