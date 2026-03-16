@@ -62,6 +62,9 @@ public class TabulatedFunction {
     }
 
     public FunctionPoint getPoint(int index) {
+        if (index < 0 || index > pointsCount_) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
         FunctionPoint p = new FunctionPoint(points[index]);
         return p;
     }
@@ -92,13 +95,17 @@ public class TabulatedFunction {
     }
     
     public double getPointX(int index) {
+        if (index < 0 || index > rightX_) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
         FunctionPoint p = points[index];
         return p.x;
     }
 
     public void setPointX(int index, double x) {
         if (index < 0 || index >= pointsCount_) {
-            throw new IndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
         if (index > 0 && x <= points[index - 1].x) {
@@ -122,16 +129,27 @@ public class TabulatedFunction {
     }
 
     public double getPointY(int index) {
+        if (index < 0 || index > pointsCount_) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
         FunctionPoint p = new FunctionPoint(points[index]);
         return p.y;
     }
     
     public void setPointY(int index, double y) {
+        if (index < 0 || index > pointsCount_) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
         FunctionPoint newp = new FunctionPoint(points[index].x, y);
         points[index] = newp;
     }
 
     public void deletePoint(int index) {
+        if (index < 0 || index > pointsCount_) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
         FunctionPoint[] newarr = new FunctionPoint[points.length - 1];
 
         System.arraycopy(points, 0, newarr, 0, index);
