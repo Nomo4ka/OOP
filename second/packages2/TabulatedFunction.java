@@ -8,12 +8,15 @@ public class TabulatedFunction {
     private int capacity;
 
     public TabulatedFunction(double leftX, double rightX, int pointsCount) {
+        if (leftX >= rightX && pointsCount == 2) {
+            throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
+        }
         leftX_ = leftX;
         rightX_ = rightX;
         pointsCount_ = pointsCount;
         capacity = (pointsCount_ * 3)/2;
         points = new FunctionPoint[capacity];
-
+        
         double step = (rightX - leftX) / (pointsCount - 1);
         for (int i = 0; i < pointsCount_; i++) {
             FunctionPoint p = new FunctionPoint(leftX + i * step, 0);
@@ -22,6 +25,9 @@ public class TabulatedFunction {
     }
 
     public TabulatedFunction(double leftX, double rightX, double[] values) {
+        if (leftX >= rightX && values.length == 2) {
+            throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
+        }
         leftX_ = leftX;
         rightX_ = rightX;
         pointsCount_ = values.length;
@@ -36,11 +42,11 @@ public class TabulatedFunction {
     }
 
     public double getleftDomainBorder() {
-        return points[0].x;
+        return points[0].getX();
     }
 
     public double getRightDomainBorder() {
-        return points[pointsCount_ - 1].x;
+        return points[pointsCount_ - 1].getX();
     }
 
     public double getFunctionalvalue(double x) {
@@ -48,9 +54,9 @@ public class TabulatedFunction {
             for (int i = 0; i < pointsCount_ - 1; i++) {
                 FunctionPoint p1 = points[i];
                 FunctionPoint p2 = points[i + 1];
-                if (x >= p1.x && x <= p2.x) {
-                    double t = (x - p1.x) / (p2.x - p1.x);
-                    return p1.y + t * (p2.y - p1.y);
+                if (x >= p1.getX() && x <= p2.getX()) {
+                    double t = (x - p1.getX()) / (p2.getX() - p1.getX());
+                    return p1.getY() + t * (p2.getY() - p1.getY());
                 }
             }
         }
@@ -74,11 +80,11 @@ public class TabulatedFunction {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        if (index > 0 && point.x <= points[pointsCount_ - 1].x) {
+        if (index > 0 && point.getX() <= points[pointsCount_ - 1].getX()) {
             throw new IllegalArgumentException("Точка должна быть больше предыдущей!");
         }
 
-        if (index < pointsCount_ - 1 && point.x > points[index + 1].x) {
+        if (index < pointsCount_ - 1 && point.getX() > points[index + 1].getX()) {
             throw new IllegalArgumentException("Точка должна быть меньше предыдущей!");
         }
 
@@ -86,11 +92,11 @@ public class TabulatedFunction {
         points[index] = newp;
 
         if (index == 0) {
-            leftX_ = points[0].x;
+            leftX_ = points[0].getX();
         }
 
         if (index == points.length - 1) {
-            rightX_ = points[pointsCount_ - 1].x;
+            rightX_ = points[pointsCount_ - 1].getX();
         }
     }
     
@@ -100,31 +106,31 @@ public class TabulatedFunction {
         }
 
         FunctionPoint p = points[index];
-        return p.x;
+        return p.getX();
     }
 
-    public void setPointX(int index, double x) {
+    public void setPointX(int index, double x) throws InappropriateFunctionPointException {
         if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        if (index > 0 && x <= points[index - 1].x) {
-            throw new IllegalArgumentException("x должен быть больше предыдущей точки!");
+        if (index > 0 && x <= points[index - 1].getX()) {
+            throw new InappropriateFunctionPointException("x должен быть больше предыдущей точки!");
         }
 
-        if (index < pointsCount_ - 1 && x >= points[index + 1].x) {
-            throw new IllegalArgumentException("x должен быть меньше следующей точки!");
+        if (index < pointsCount_ - 1 && x >= points[index + 1].getX()) {
+            throw new InappropriateFunctionPointException("x должен быть меньше следующей точки!");
         }
 
-        FunctionPoint newp = new FunctionPoint(x, points[index].y);
+        FunctionPoint newp = new FunctionPoint(x, points[index].getY());
         points[index] = newp;
-        points[index].x = x;
+        points[index].setX(x);
 
         if (index == 0) {
-            leftX_ = points[0].x;
+            leftX_ = points[0].getX();
         }
         if (index == pointsCount_ - 1) {
-            rightX_ = points[pointsCount_ - 1].x;
+            rightX_ = points[pointsCount_ - 1].getX();
         }
     }
 
@@ -134,7 +140,7 @@ public class TabulatedFunction {
         }
 
         FunctionPoint p = new FunctionPoint(points[index]);
-        return p.y;
+        return p.getY();
     }
     
     public void setPointY(int index, double y) {
@@ -142,7 +148,7 @@ public class TabulatedFunction {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        FunctionPoint newp = new FunctionPoint(points[index].x, y);
+        FunctionPoint newp = new FunctionPoint(points[index].getX(), y);
         points[index] = newp;
     }
 
@@ -150,6 +156,11 @@ public class TabulatedFunction {
         if (index < 0 || index > pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
+
+        if (pointsCount_ < 3) {
+            throw new IllegalStateException("На момент удаления точки в массиве всего 3 точки");
+        }
+        
         FunctionPoint[] newarr = new FunctionPoint[points.length - 1];
 
         System.arraycopy(points, 0, newarr, 0, index);
@@ -159,23 +170,25 @@ public class TabulatedFunction {
         pointsCount_--;
 
         if (pointsCount_ > 0) {
-            leftX_ = points[0].x;
-            rightX_ = points[pointsCount_-1].x;
+            leftX_ = points[0].getX();
+            rightX_ = points[pointsCount_-1].getX();
         }
     }
 
     //arr = {{1,2},{2,3},{2.5,1},{3,4}}
-    public void addPoint(FunctionPoint point) {
-        int index = rangeCheckForAdd(point.x);
+    public void addPoint(FunctionPoint point) throws InappropriateFunctionPointException {
+        for (int i = 0; i < pointsCount_; i++) {
+            if (points[i].getX() == point.getX()) {
+                throw new InappropriateFunctionPointException("Абсцисса добавляемой точки уже существует");
+            }
+        }
+
+        int index = rangeCheckForAdd(point.getX());
         if (pointsCount_ == points.length)
             points = grow(); 
 
         System.arraycopy(points, index, points, index + 1, pointsCount_ - index);
 
-        if (index < pointsCount_ && points[index].x == point.x) {
-            points[index] = point; // замена существующей
-            return;
-        }
         points[index] = point;
         ++pointsCount_;
         // pointsCount_ = s + 1;
@@ -183,7 +196,7 @@ public class TabulatedFunction {
     
     private int rangeCheckForAdd(double x) {
         for (int i = 0; i < pointsCount_; i++) {
-            if (x <= points[i].x) {
+            if (x <= points[i].getX()) {
                 return i;
             }
         }
