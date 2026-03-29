@@ -7,8 +7,17 @@ public class FunctionNode {
     public FunctionNode prev;
 
     FunctionNode(FunctionNode prev, FunctionPoint p, FunctionNode next) {
+        this.prev = prev;
         this.p = p;
         this.next = next;
-        this.prev = prev;
+    }
+    
+    FunctionNode(FunctionPoint p) {
+        this.p = p;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%.2f; %.2f)", p.getX(), p.getY());
     }
 }
