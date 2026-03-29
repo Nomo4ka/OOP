@@ -1,17 +1,8 @@
+package LindedList;
 import packages.FunctionPoint;
 
 public class LinkedListTabulatedFunction {
-    static private class FunctionNode {
-        FunctionPoint p;
-        private FunctionNode next;
-        private FunctionNode prev;
-
-        FunctionNode(FunctionNode prev, FunctionPoint p, FunctionNode next) {
-            this.p = p;
-            this.next = next;
-            this.prev = prev;
-        }
-    }
+   
     
     int size = 0;
     FunctionNode first;
@@ -56,14 +47,6 @@ public class LinkedListTabulatedFunction {
     }
 
     FunctionNode addNodeByIndex(int index, FunctionPoint p) {
-        FunctionNode newNode = new FunctionNode();
-
-        last.next = newNode;
-        last = newNode;
-
-        size++;
-
-        return newNode;
+      
     }
-    
 }
