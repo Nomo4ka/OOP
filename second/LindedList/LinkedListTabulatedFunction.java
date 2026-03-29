@@ -3,7 +3,6 @@ import packages.FunctionPoint;
 
 public class LinkedListTabulatedFunction {
    
-    
     int size = 0;
     FunctionNode first;
     FunctionNode last;

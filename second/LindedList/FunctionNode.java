@@ -3,8 +3,8 @@ import packages2.*;
 
 public class FunctionNode {
     FunctionPoint p;
-    private FunctionNode next;
-    private FunctionNode prev;
+    public FunctionNode next;
+    public FunctionNode prev;
 
     FunctionNode(FunctionNode prev, FunctionPoint p, FunctionNode next) {
         this.p = p;
