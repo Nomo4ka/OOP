@@ -1,5 +1,5 @@
-import packages2.*;
-import packages2.InappropriateFunctionPointException;
+import packages.*;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -17,11 +17,7 @@ public class Main {
         System.out.println("Количество точек: " + tabf.getPointsCount());
         System.out.println("\n=== Добавление точки (2.5, 6.25) ===");
         FunctionPoint newPoint = new FunctionPoint(2.5, 6.25);
-        try {
-            tabf.addPoint(newPoint);
-        } catch (InappropriateFunctionPointException e) {
-            System.err.println("Не удалось добавить точку!");
-        }
+        tabf.addPoint(newPoint);
 
         System.out.println("\n=== Функция после добавления точки ===");
         System.out.println(tabf);

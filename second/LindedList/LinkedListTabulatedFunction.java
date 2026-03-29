@@ -1,5 +1,5 @@
 package LindedList;
-import packages.FunctionPoint;
+import packages2.FunctionPoint;
 
 public class LinkedListTabulatedFunction {
    
