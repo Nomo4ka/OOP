@@ -136,8 +136,8 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
-
-        return points[index].getY();
+        FunctionPoint p = points[index];
+        return p.getY();
     }
     
     public void setPointY(int index, double y) {
