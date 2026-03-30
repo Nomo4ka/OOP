@@ -3,14 +3,14 @@ import functions.*;
 public class Main {
     static public void main(String[] args) {
         double[] values = {25, 16, 9, 4, 1, 0, 1, 4, 9, 16, 25};     // Значения ординат. Описывают параболу
-            // Запуск проверки класса ArrayTabulatedFunction
-            ArrayTabulatedFunction arrayTabFunc = new ArrayTabulatedFunction(-5, 5, values);
-            System.out.println("ПРОВЕРКА ArrayTabulatedFunction:");
-            TestTabulatedFunction(arrayTabFunc);    // Передаём объект ArrayTabulatedFunction
+        // Запуск проверки класса ArrayTabulatedFunction
+        ArrayTabulatedFunction arrayTabFunc = new ArrayTabulatedFunction(-5, 5, values);
+        System.out.println("ПРОВЕРКА ArrayTabulatedFunction:");
+        TestTabulatedFunction(arrayTabFunc);    // Передаём объект ArrayTabulatedFunction
 
-            LinkedListTabulatedFunction linkedListTabFunc = new LinkedListTabulatedFunction(-5, 5, values);
-            System.out.println("\n\nПРОВЕРКА LinkedListTabulatedFunction:");
-            TestTabulatedFunction(linkedListTabFunc);   // Передаём объект LinkedListTabulatedFunction
+        LinkedListTabulatedFunction linkedListTabFunc = new LinkedListTabulatedFunction(-5, 5, values);
+        System.out.println("\n\nПРОВЕРКА LinkedListTabulatedFunction:");
+        TestTabulatedFunction(linkedListTabFunc);   // Передаём объект LinkedListTabulatedFunction
     }
 
     // Благодаря интерфейсу TabulatedFunction мы можем передать любой класс, его реализующий

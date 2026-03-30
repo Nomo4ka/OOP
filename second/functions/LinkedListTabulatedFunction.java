@@ -1,7 +1,22 @@
 package functions;
 
 public class LinkedListTabulatedFunction implements TabulatedFunction {
-   
+    
+    private static class FunctionNode {
+        FunctionPoint p;
+        private FunctionNode next;
+        private FunctionNode prev;
+
+        FunctionNode(FunctionPoint p) {
+            this.p = p;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("(%.2f; %.2f)", p.getX(), p.getY());
+        }
+    }
+
     int size = 0;
     FunctionNode head;
     FunctionNode tail;
