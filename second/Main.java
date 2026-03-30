@@ -54,19 +54,19 @@ public class Main {
         function.deletePoint(0);
         System.out.println(function);
 
-        System.out.println("\nЗамена точки с индексом 2 на точку f = (-2.5, 6.25)");
-        test_point = new FunctionPoint(-2.5, 6.25);
-        System.out.printf("Исходная точка: f2= (%.3f; %.3f)%n", function.getPointX(2), function.getPointY(2));
-        function.setPoint(2, test_point);
-        System.out.printf("Измененная точка: f2= (%.3f; %.3f)%n", function.getPointX(2), function.getPointY(2));
-        System.out.println(function);
+        // System.out.println("\nЗамена точки с индексом 2 на точку f = (-2.5, 6.25)");
+        // test_point = new FunctionPoint(-2.5, 6.25);
+        // System.out.printf("Исходная точка: f2= (%.3f; %.3f)%n", function.getPointX(2), function.getPointY(2));
+        // function.setPoint(2, test_point);
+        // System.out.printf("Измененная точка: f2= (%.3f; %.3f)%n", function.getPointX(2), function.getPointY(2));
+        // System.out.println(function);
 
-        System.out.println("\nЗамена точки с номером 0 по значению x = -3.5");
-        System.out.printf("Исходная точка: f5= (%.3f; %.3f)%n", function.getPointX(4), function.getPointY(4));
-        function.setPointX(0, -3.5);
-        function.setPointY(0, 12.25);
-        System.out.printf("Измененная точка: f5= (%.3f; %.3f)%n", function.getPointX(4), function.getPointY(4));
-        System.out.println(function);
+        // System.out.println("\nЗамена точки с номером 0 по значению x = -3.5");
+        // System.out.printf("Исходная точка: f5= (%.3f; %.3f)%n", function.getPointX(4), function.getPointY(4));
+        // function.setPointX(0, -3.5);
+        // function.setPointY(0, 12.25);
+        // System.out.printf("Измененная точка: f5= (%.3f; %.3f)%n", function.getPointX(4), function.getPointY(4));
+        // System.out.println(function);
 
         System.out.println("\nПроверка исключений:");
         try{
