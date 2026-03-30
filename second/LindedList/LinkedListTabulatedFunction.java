@@ -176,7 +176,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         addNodeToTail(point);
     }
     //------------------------------------------------------
-    public FunctionNode getNodeByIndex(int index) {
+    private FunctionNode getNodeByIndex(int index) {
         if (index < size / 2) {
             FunctionNode p = head;
             for (int i = 0; i < index; i++) {
@@ -192,7 +192,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         }
     }
 
-    public FunctionNode addNodeToTail(FunctionPoint p) {
+    private FunctionNode addNodeToTail(FunctionPoint p) {
         FunctionNode newNode = new FunctionNode(p);
         if(head == null){
             head = tail = newNode;
@@ -205,7 +205,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return newNode;
     }
 
-    public FunctionNode addNodeToHead(FunctionPoint p) {
+    private FunctionNode addNodeToHead(FunctionPoint p) {
         FunctionNode newNode = new FunctionNode(p);
         if (head == null) {
             head = tail = newNode;
@@ -218,7 +218,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return newNode;
     }
 
-    public FunctionNode addNodeByIndex(int index, FunctionPoint p) {
+    private FunctionNode addNodeByIndex(int index, FunctionPoint p) {
         FunctionNode newNode;
 
         if (index == 0) {
@@ -256,7 +256,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return newNode;
     }
     
-    public FunctionNode deleteNodeByIndex(int index) {
+    private FunctionNode deleteNodeByIndex(int index) {
 
         FunctionNode deletedNode;
 

@@ -22,9 +22,7 @@ public class Main {
         System.out.println("Количество точек: " + function.getPointsCount());
 
         System.out.println("\nТочки функции:");
-        for (int i = 0; i < function.getPointsCount(); i++) {
-            System.out.printf("f%d: (%.3f; %.3f)%n", i, function.getPointX(i), function.getPointY(i));
-        }
+        System.out.println(function);
 
         System.out.println("\nЗначения f(x)  разных точках: ");
         double[] test = {-5, -4.5, 4.5, 5, 0, 9};
