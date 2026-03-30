@@ -1,11 +1,8 @@
 package LindedList;
 
-import packages2.FunctionPoint;
-import packages2.FunctionPointIndexOutOfBoundsException;
-import packages2.InappropriateFunctionPointException;
+import packages2.*;
 
-
-public class LinkedListTabulatedFunction {
+public class LinkedListTabulatedFunction implements TabulatedFunction {
    
     int size = 0;
     FunctionNode head;

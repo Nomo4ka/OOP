@@ -1,6 +1,6 @@
 package packages2;
 
-public class ArrayTabulatedFunction {
+public class ArrayTabulatedFunction implements TabulatedFunction {
     
     private FunctionPoint points[];
     private int pointsCount_;
@@ -41,15 +41,15 @@ public class ArrayTabulatedFunction {
         }
     }
 
-    public double getleftDomainBorder() {
+    public double getLeftDomainBorder() {
         return points[0].getX();
     }
-
+    
     public double getRightDomainBorder() {
         return points[pointsCount_ - 1].getX();
     }
 
-    public double getFunctionalvalue(double x) {
+    public double getFunctionalValue(double x) {
         if (x >= leftX_ && x <= rightX_) {
             for (int i = 0; i < pointsCount_ - 1; i++) {
                 FunctionPoint p1 = points[i];
