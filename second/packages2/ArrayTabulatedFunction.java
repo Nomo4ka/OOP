@@ -1,13 +1,13 @@
 package packages2;
 
-public class TabulatedFunction {
+public class ArrayTabulatedFunction {
     
     private FunctionPoint points[];
     private int pointsCount_;
     private double leftX_, rightX_;
     private int capacity;
 
-    public TabulatedFunction(double leftX, double rightX, int pointsCount) {
+    public ArrayTabulatedFunction(double leftX, double rightX, int pointsCount) {
         if (leftX >= rightX && pointsCount == 2) {
             throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
         }
@@ -24,7 +24,7 @@ public class TabulatedFunction {
         } 
     }
 
-    public TabulatedFunction(double leftX, double rightX, double[] values) {
+    public ArrayTabulatedFunction(double leftX, double rightX, double[] values) {
         if (leftX >= rightX && values.length == 2) {
             throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
         }
