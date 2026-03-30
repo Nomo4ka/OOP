@@ -31,7 +31,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         leftX_ = leftX;
         rightX_ = rightX;
         pointsCount_ = values.length;
-        capacity = (pointsCount_ * 3)/2;
+        capacity = (pointsCount_ * 3) / 2;
         points = new FunctionPoint[capacity];
 
         double step = (rightX - leftX) / (values.length - 1);
@@ -39,6 +39,23 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
             FunctionPoint p = new FunctionPoint(leftX + i * step, values[i]);
             points[i] = p;
         }
+    }
+    
+    public ArrayTabulatedFunction(FunctionPoint[] points) {
+        if (points.length < 2) {
+            throw new IllegalArgumentException("Должно быть не менее 2 точек!");
+        }
+        for (int i = 1; i < points.length; i++) {
+            if (points[i].getX() <= points[i - 1].getX()) {
+                throw new IllegalArgumentException("Точки должны быть упорядочены по возрастанию X!");
+            }
+        }
+        pointsCount_ = points.length;
+        capacity = (pointsCount_ * 3) / 2;
+        this.points = new FunctionPoint[capacity];
+        System.arraycopy(points, 0, this.points, 0, pointsCount_);
+        leftX_ = points[0].getX();
+        rightX_ = points[pointsCount_ - 1].getX();
     }
 
     public double getLeftDomainBorder() {
@@ -49,7 +66,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         return points[pointsCount_ - 1].getX();
     }
 
-    public double getFunctionalValue(double x) {
+    public double getFunctionValue(double x) {
         if (x >= leftX_ && x <= rightX_) {
             for (int i = 0; i < pointsCount_ - 1; i++) {
                 FunctionPoint p1 = points[i];
@@ -99,7 +116,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
     }
     
     public double getPointX(int index) {
-        if (index < 0 || index > rightX_) {
+        if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
@@ -180,6 +197,8 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
 
         points[index] = point;
         ++pointsCount_;
+        leftX_ = points[0].getX();
+        rightX_ = points[pointsCount_ - 1].getX();
         // pointsCount_ = s + 1;
     }
     
@@ -196,6 +215,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         int newcap = (capacity * 3) / 2;
         FunctionPoint[] newpPoints = new FunctionPoint[newcap];
         System.arraycopy(points, 0, newpPoints, 0, pointsCount_);
+        capacity = newcap;
         return newpPoints;
     }
 

@@ -26,10 +26,10 @@ public class Main {
             System.out.println("\nЗначения f(x) разных точках: ");
             double[] test = {-5, -4.5, 4.5, 5, 0, 9};
             for (double x : test) {
-                if (Double.isNaN(function.getFunctionalValue(x))) {
+                if (Double.isNaN(function.getFunctionValue(x))) {
                     System.out.printf("f(%.3f): не определенно%n", x);
                 } else {
-                    System.out.printf("f(%.3f) = %.3f%n", x, function.getFunctionalValue(x));
+                    System.out.printf("f(%.3f) = %.3f%n", x, function.getFunctionValue(x));
                 }
             }
 

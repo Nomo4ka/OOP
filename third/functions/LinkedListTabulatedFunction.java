@@ -25,6 +25,21 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         head = null;
         tail = null;
     }
+
+    public LinkedListTabulatedFunction(FunctionPoint[] points) {
+        if (points.length < 2) {
+            throw new IllegalArgumentException("Должно быть не менее 2 точек!");
+        }
+        for (int i = 1; i < points.length; i++) {
+            if (points[i].getX() <= points[i - 1].getX()) {
+                throw new IllegalArgumentException("Точки должны быть упорядочены по возрастанию X!");
+            }
+        }
+
+        for (FunctionPoint point : points) {
+            addNodeToTail(point);
+        }
+    }
     //5 таска
     // ------------------------------------------------------
     public LinkedListTabulatedFunction(double leftX, double rightX, int pointsCount) {
@@ -132,7 +147,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         getNodeByIndex(index).p.setY(y);
     }
     //------------------------------------------------------
-    public double getFunctionalValue(double x) {
+    public double getFunctionValue(double x) {
         if (x < getLeftDomainBorder() || x > getRightDomainBorder()) {
             return Double.NaN;
         }

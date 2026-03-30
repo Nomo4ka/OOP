@@ -1,9 +1,6 @@
 package functions;
 
-public interface TabulatedFunction {
-    double getLeftDomainBorder();
-    double getRightDomainBorder();
-    double getFunctionalValue(double x);
+public interface TabulatedFunction extends Function {    
     int getPointsCount();
     FunctionPoint getPoint(int index);
     void setPoint(int index, FunctionPoint point) throws InappropriateFunctionPointException;
