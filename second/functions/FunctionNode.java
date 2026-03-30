@@ -2,9 +2,9 @@ package functions;
 
 public class FunctionNode {
     FunctionPoint p;
-    public FunctionNode next;
-    public FunctionNode prev;
-
+    protected FunctionNode next;
+    protected FunctionNode prev;
+    
     FunctionNode(FunctionNode prev, FunctionPoint p, FunctionNode next) {
         this.prev = prev;
         this.p = p;
