@@ -1,4 +1,4 @@
-package packages2;
+package functions;
 
 public class FunctionPoint {
     private double x, y;

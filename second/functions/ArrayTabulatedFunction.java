@@ -1,4 +1,4 @@
-package packages2;
+package functions;
 
 public class ArrayTabulatedFunction implements TabulatedFunction {
     

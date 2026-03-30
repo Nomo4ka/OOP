@@ -1,5 +1,4 @@
-package LindedList;
-import packages2.*;
+package functions;
 
 public class FunctionNode {
     FunctionPoint p;

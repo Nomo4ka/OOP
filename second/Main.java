@@ -1,5 +1,4 @@
-import LindedList.LinkedListTabulatedFunction;
-import packages2.*;
+import functions.*;
 
 public class Main {
     static public void main(String[] args) {
@@ -62,7 +61,6 @@ public class Main {
                 System.out.println("Невозможно удалить: недостаточно точек");
             }
 
-            // Корректная замена точки с индексом 2 - используем существующую точку
             System.out.println("\nЗамена точки с индексом 2 на точку f = (-1.5, 2.25)");
             if (function.getPointsCount() > 2) {
                 // Получаем соседние точки, чтобы определить допустимый диапазон

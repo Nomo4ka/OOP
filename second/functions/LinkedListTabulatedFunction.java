@@ -1,6 +1,4 @@
-package LindedList;
-
-import packages2.*;
+package functions;
 
 public class LinkedListTabulatedFunction implements TabulatedFunction {
    
