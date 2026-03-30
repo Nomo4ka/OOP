@@ -2,7 +2,6 @@ package LindedList;
 
 import packages2.FunctionPoint;
 
-import java.util.LinkedList;
 
 public class LinkedListTabulatedFunction {
    
@@ -33,94 +32,108 @@ public class LinkedListTabulatedFunction {
 
     public FunctionNode addNodeToTail(FunctionPoint p) {
         FunctionNode newNode = new FunctionNode(p);
-        
-        tail.next = newNode;
-        newNode.prev = tail;
-        tail = newNode;
-
+        if(head == null){
+            head = tail = newNode;
+        } else { 
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
         size++;
-        
         return newNode;
     }
 
     public FunctionNode addNodeToHead(FunctionPoint p) {
         FunctionNode newNode = new FunctionNode(p);
-
-        head.prev = newNode;
-        newNode.next = head;
-        head = newNode;
-
-        ++size;
-
+        if (head == null) {
+            head = tail = newNode;
+        } else { 
+            head.prev = newNode;
+            newNode.next = head;
+            head = newNode;
+        }
+        size++;
         return newNode;
     }
 
-
     public FunctionNode addNodeByIndex(int index, FunctionPoint p) {
-        FunctionNode node;
         FunctionNode newNode;
+
         if (index == 0) {
             addNodeToHead(p);
             newNode = head;
-        } else if (index == size - 1) {
+        }
+        else if (index == size) {
             addNodeToTail(p);
             newNode = tail;
-        } else {
+        }
+        else {
+            FunctionNode node;
             if (index < size / 2) {
                 node = head;
                 for (int i = 0; i < index; i++) {
                     node = node.next;
                 }
-
             } else {
                 node = tail;
                 for (int i = size - 1; i > index; --i) {
                     node = node.prev;
                 }
             }
+
             newNode = new FunctionNode(p);
-            FunctionNode prevNode = node;
-            FunctionNode nextNode = node.next;
+            FunctionNode prevNode = node.prev;
+
             prevNode.next = newNode;
             newNode.prev = prevNode;
-            newNode.next = nextNode;
-            nextNode.prev = newNode;
+            newNode.next = node;
+            node.prev = newNode;
+
+            ++size;
         }
-        ++size;
         return newNode;
     }
     
-    FunctionNode deleteNodeByIndex(int index) {
-        FunctionNode node;
+    public FunctionNode deleteNodeByIndex(int index) {
+
         FunctionNode deletedNode;
-        if (index == 0) {
+
+        if (size == 1) {
+            deletedNode = head;
+            head = null;
+            tail = null;
+        } 
+        else if (index == 0) {
             deletedNode = head;
             head = head.next;
             head.prev = null;
-        } else if (index == size - 1) {
+        } 
+        else if (index == size - 1) {
             deletedNode = tail;
             tail = tail.prev;
             tail.next = null;
-        } else {
+        } 
+        else {
+            deletedNode = head;
             if (index < size / 2) {
-                node = head;
                 for (int i = 0; i < index; i++) {
-                    node = node.next;
+                    deletedNode = deletedNode.next;
                 }
-
             } else {
-                node = tail;
+                deletedNode = tail;
                 for (int i = size - 1; i > index; --i) {
-                    node = node.prev;
+                    deletedNode = deletedNode.prev;
                 }
             }
-            deletedNode = node;
-            FunctionNode prevNode = node;
-            FunctionNode nextNode = node.next;
+
+            FunctionNode prevNode = deletedNode.prev; 
+            FunctionNode nextNode = deletedNode.next; 
+
             prevNode.next = nextNode;
             nextNode.prev = prevNode;
         }
-        --size;
+
+        size--;
         return deletedNode;
     }
     
@@ -143,5 +156,4 @@ public class LinkedListTabulatedFunction {
         sb.append("]");
         return sb.toString();
     }
-
 }
