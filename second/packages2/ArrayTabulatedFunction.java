@@ -75,17 +75,17 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         return p;
     }
 
-    public void setPoint(int index, FunctionPoint point) {
+    public void setPoint(int index, FunctionPoint point)  throws InappropriateFunctionPointException {
         if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
         if (index > 0 && point.getX() <= points[pointsCount_ - 1].getX()) {
-            throw new IllegalArgumentException("Точка должна быть больше предыдущей!");
+            throw new InappropriateFunctionPointException("Точка должна быть больше предыдущей!");
         }
 
         if (index < pointsCount_ - 1 && point.getX() > points[index + 1].getX()) {
-            throw new IllegalArgumentException("Точка должна быть меньше предыдущей!");
+            throw new InappropriateFunctionPointException("Точка должна быть меньше предыдущей!");
         }
 
         FunctionPoint newp = new FunctionPoint(point);
