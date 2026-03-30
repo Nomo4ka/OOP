@@ -7,7 +7,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         private FunctionNode next;
         private FunctionNode prev;
 
-
         FunctionNode(FunctionPoint p) {
             this.p = p;
         }
