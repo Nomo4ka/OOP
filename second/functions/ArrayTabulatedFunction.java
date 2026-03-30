@@ -68,36 +68,34 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
     }
 
     public FunctionPoint getPoint(int index) {
-        if (index < 0 || index > pointsCount_) {
+        if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
-        FunctionPoint p = new FunctionPoint(points[index]);
-        return p;
+        return new FunctionPoint(points[index]);
     }
 
-    public void setPoint(int index, FunctionPoint point)  throws InappropriateFunctionPointException {
+    public void setPoint(int index, FunctionPoint point)
+            throws InappropriateFunctionPointException {
+
         if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        if (index > 0 && point.getX() <= points[pointsCount_ - 1].getX()) {
+        if (index > 0 && point.getX() <= points[index - 1].getX()) {
             throw new InappropriateFunctionPointException("Точка должна быть больше предыдущей!");
         }
 
-        if (index < pointsCount_ - 1 && point.getX() > points[index + 1].getX()) {
-            throw new InappropriateFunctionPointException("Точка должна быть меньше предыдущей!");
+        if (index < pointsCount_ - 1 && point.getX() >= points[index + 1].getX()) {
+            throw new InappropriateFunctionPointException("Точка должна быть меньше следующей!");
         }
 
-        FunctionPoint newp = new FunctionPoint(point);
-        points[index] = newp;
+        points[index] = new FunctionPoint(point);
 
-        if (index == 0) {
+        if (index == 0)
             leftX_ = points[0].getX();
-        }
 
-        if (index == points.length - 1) {
+        if (index == pointsCount_ - 1)
             rightX_ = points[pointsCount_ - 1].getX();
-        }
     }
     
     public double getPointX(int index) {
@@ -135,44 +133,35 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
     }
 
     public double getPointY(int index) {
-        if (index < 0 || index > pointsCount_) {
+        if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        FunctionPoint p = new FunctionPoint(points[index]);
-        return p.getY();
+        return points[index].getY();
     }
     
     public void setPointY(int index, double y) {
-        if (index < 0 || index > pointsCount_) {
+        if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        FunctionPoint newp = new FunctionPoint(points[index].getX(), y);
-        points[index] = newp;
+        points[index].setY(y);
     }
 
     public void deletePoint(int index) {
-        if (index < 0 || index > pointsCount_) {
+        if (index < 0 || index >= pointsCount_) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        if (pointsCount_ < 3) {
-            throw new IllegalStateException("На момент удаления точки в массиве всего 3 точки");
+        if (pointsCount_ <= 2) {
+            throw new IllegalStateException("Нельзя удалить точку — останется меньше 2 точек");
         }
-        
-        FunctionPoint[] newarr = new FunctionPoint[points.length - 1];
 
-        System.arraycopy(points, 0, newarr, 0, index);
-        System.arraycopy(points, index + 1, newarr, index, pointsCount_ - index - 1);
-
-        points = newarr;
+        System.arraycopy(points, index + 1, points, index, pointsCount_ - index - 1);
         pointsCount_--;
 
-        if (pointsCount_ > 0) {
-            leftX_ = points[0].getX();
-            rightX_ = points[pointsCount_-1].getX();
-        }
+        leftX_ = points[0].getX();
+        rightX_ = points[pointsCount_ - 1].getX();
     }
 
     //arr = {{1,2},{2,3},{2.5,1},{3,4}}
