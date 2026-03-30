@@ -1,6 +1,8 @@
 package LindedList;
 
 import packages2.FunctionPoint;
+import packages2.FunctionPointIndexOutOfBoundsException;
+import packages2.InappropriateFunctionPointException;
 
 
 public class LinkedListTabulatedFunction {
@@ -13,7 +15,170 @@ public class LinkedListTabulatedFunction {
         head = null;
         tail = null;
     }
+    //5 таска
+    // ------------------------------------------------------
+    public LinkedListTabulatedFunction(double leftX, double rightX, int pointsCount) {
+        if (leftX >= rightX && pointsCount == 2) {
+            throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
+        }
 
+        double step = (rightX - leftX) / (pointsCount - 1);
+
+        for (int i = 0; i < pointsCount; i++) {
+            addNodeToTail(new FunctionPoint(leftX + i * step, 0));
+        }
+    }
+
+    public LinkedListTabulatedFunction(double leftX, double rightX, double[] values) {
+        if (leftX >= rightX && values.length == 2) {
+            throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
+        }
+
+        double step = (rightX - leftX) / (values.length - 1);
+
+        for (int i = 0; i < values.length; i++) {
+            addNodeToTail(new FunctionPoint(leftX + i * step, values[i]));
+        }
+    }
+
+    public double getLeftDomainBorder() {
+        return head.p.getX();
+    }
+
+    public double getRightDomainBorder() {
+        return tail.p.getX();
+    }
+
+    public int getPointsCount() {
+        return size;
+    }
+
+    public FunctionPoint getPoint(int index) {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
+        FunctionNode node = getNodeByIndex(index);
+        return new FunctionPoint(node.p);
+    }
+
+    public void setPoint(int index, FunctionPoint point) {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
+        FunctionNode node = getNodeByIndex(index);
+
+        if (node.prev != null && point.getX() <= node.prev.p.getX()) {
+            throw new IllegalArgumentException("X должен быть больше предыдущей точки!");
+        }
+
+        if (node.next != null && point.getX() >= node.next.p.getX()) {
+            throw new IllegalArgumentException("X должен быть меньше следующей точки!");
+        }
+
+        node.p = new FunctionPoint(point);
+    }
+    
+    public double getPointX(int index) {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
+        return getNodeByIndex(index).p.getX();
+    }
+    
+    public void setPointX(int index, double x) throws InappropriateFunctionPointException {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
+        FunctionNode node = getNodeByIndex(index);
+
+        if (node.prev != null && x <= node.prev.p.getX()) {
+            throw new InappropriateFunctionPointException("X должен быть больше предыдущей точки!");
+        }
+
+        if (node.next != null && x >= node.next.p.getX()) {
+            throw new InappropriateFunctionPointException("X должен быть меньше следующей точки!");
+        }
+
+        node.p.setX(x);
+    }
+
+    public double getPointY(int index) {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
+        return getNodeByIndex(index).p.getY();
+    }
+
+    public void setPointY(int index, double y) {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
+        getNodeByIndex(index).p.setY(y);
+    }
+    //------------------------------------------------------
+    public double getFunctionalValue(double x) {
+        if (x < getLeftDomainBorder() || x > getRightDomainBorder()) {
+            return Double.NaN;
+        }
+
+        FunctionNode node = head;
+
+        while (node.next != null) {
+            FunctionPoint p1 = node.p;
+            FunctionPoint p2 = node.next.p;
+
+            if (x >= p1.getX() && x <= p2.getX()) {
+                double t = (x - p1.getX()) / (p2.getX() - p1.getX());
+                return p1.getY() + t * (p2.getY() - p1.getY());
+            }
+
+            node = node.next;
+        }
+
+        return Double.NaN;
+    }
+
+    public void deletePoint(int index) {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
+        if (size < 3) {
+            throw new IllegalStateException("Нельзя удалить точку, если их меньше 3!");
+        }
+
+        deleteNodeByIndex(index);
+    }
+
+    public void addPoint(FunctionPoint point) throws InappropriateFunctionPointException {
+
+        FunctionNode node= head;
+        int index = 0;
+
+        while (node != null) {
+
+            if (node.p.getX() == point.getX()) {
+                throw new InappropriateFunctionPointException("Такая точка уже существует!");
+            }
+
+            if (point.getX() < node.p.getX()) {
+                addNodeByIndex(index, point);
+                return;
+            }
+
+            node = node.next;
+            index++;
+        }
+
+        addNodeToTail(point);
+    }
+    //------------------------------------------------------
     public FunctionNode getNodeByIndex(int index) {
         if (index < size / 2) {
             FunctionNode p = head;
