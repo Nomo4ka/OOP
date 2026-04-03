@@ -11,12 +11,12 @@ public class Composition implements functions.Function {
 
     @Override
     public double getLeftDomainBorder() {
-        return Math.max(f.getLeftDomainBorder(), g.getLeftDomainBorder());
+        return g.getLeftDomainBorder();
     }
 
     @Override
     public double getRightDomainBorder() {
-        return Math.min(f.getRightDomainBorder(), g.getRightDomainBorder());
+        return g.getRightDomainBorder();
     }
 
     @Override

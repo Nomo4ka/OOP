@@ -1,16 +1,23 @@
 package functions.meta;
 
-public class Scale implements functions.Function {
-    private functions.Function f;
-    private double k;
-    private double leftDomainBorder;
-    private double rightDomainBorder;  
+import functions.Function;
 
-    public Scale(functions.Function f, double k) {
+public class Scale implements Function {
+
+    private Function f;
+    private double scaleX;
+    private double scaleY;
+    private double leftDomainBorder;
+    private double rightDomainBorder;
+
+    public Scale(Function f, double scaleX, double scaleY) {
         this.f = f;
-        this.k = k;
-        this.leftDomainBorder = f.getLeftDomainBorder();
-        this.rightDomainBorder = f.getRightDomainBorder();  
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        double left = f.getLeftDomainBorder() * scaleX;
+        double right = f.getRightDomainBorder() * scaleX;
+        this.leftDomainBorder = Math.min(left, right);
+        this.rightDomainBorder = Math.max(left, right);
     }
 
     @Override
@@ -25,9 +32,10 @@ public class Scale implements functions.Function {
 
     @Override
     public double getFunctionValue(double x) {
-        if (x < getLeftDomainBorder() || x > getRightDomainBorder()) {
+        if (x < leftDomainBorder || x > rightDomainBorder) {
             return Double.NaN;
         }
-        return k * f.getFunctionValue(x);
+
+        return scaleY * f.getFunctionValue(x / scaleX);
     }
 }

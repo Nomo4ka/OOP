@@ -2,15 +2,17 @@ package functions.meta;
 
 public class Shift implements functions.Function {
     private functions.Function f;
-    private double a;
+    private double shiftX;
     private double leftDomainBorder;
     private double rightDomainBorder;  
+    private double shiftY;
 
-    public Shift(functions.Function f, double a) {
+    public Shift(functions.Function f, double shiftX , double shiftY) {
         this.f = f;
-        this.a = a;
-        this.leftDomainBorder = f.getLeftDomainBorder() + a;
-        this.rightDomainBorder = f.getRightDomainBorder() + a;  
+        this.shiftX = shiftX;
+        this.shiftY = shiftY;
+        this.leftDomainBorder = f.getLeftDomainBorder() + shiftX;
+        this.rightDomainBorder = f.getRightDomainBorder() + shiftX;  
     }
 
     @Override
@@ -28,6 +30,6 @@ public class Shift implements functions.Function {
         if (x < getLeftDomainBorder() || x > getRightDomainBorder()) {
             return Double.NaN;
         }
-        return f.getFunctionValue(x - a);
+        return f.getFunctionValue(x - shiftX) + shiftY;
     }   
 }
