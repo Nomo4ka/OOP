@@ -1,8 +1,10 @@
 package functions;
 
-public class LinkedListTabulatedFunction implements TabulatedFunction {
+import java.io.Serializable;
+
+public class LinkedListTabulatedFunction implements TabulatedFunction, Serializable {
     
-    private static class FunctionNode {
+    private static class FunctionNode implements Serializable {
         FunctionPoint p;
         private FunctionNode next;
         private FunctionNode prev;
@@ -27,19 +29,25 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
     }
 
     public LinkedListTabulatedFunction(FunctionPoint[] points) {
-        if (points.length < 2) {
+        if (points == null || points.length < 2) {
             throw new IllegalArgumentException("Должно быть не менее 2 точек!");
         }
+
         for (int i = 1; i < points.length; i++) {
             if (points[i].getX() <= points[i - 1].getX()) {
                 throw new IllegalArgumentException("Точки должны быть упорядочены по возрастанию X!");
             }
         }
+        
+        head = null;
+        tail = null;
+        size = 0;
 
         for (FunctionPoint point : points) {
-            addNodeToTail(point);
+            addNodeToTail(new FunctionPoint(point));
         }
     }
+
     //5 таска
     // ------------------------------------------------------
     public LinkedListTabulatedFunction(double leftX, double rightX, int pointsCount) {

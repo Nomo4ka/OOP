@@ -1,6 +1,8 @@
 package functions;
 
-public class ArrayTabulatedFunction implements TabulatedFunction {
+import java.io.Serializable;
+
+public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     
     private FunctionPoint points[];
     private int pointsCount_;
@@ -45,17 +47,24 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         if (points.length < 2) {
             throw new IllegalArgumentException("Должно быть не менее 2 точек!");
         }
+
         for (int i = 1; i < points.length; i++) {
             if (points[i].getX() <= points[i - 1].getX()) {
                 throw new IllegalArgumentException("Точки должны быть упорядочены по возрастанию X!");
             }
         }
+
         pointsCount_ = points.length;
         capacity = (pointsCount_ * 3) / 2;
+        if (capacity < 2) {
+            capacity = 2;
+        }
         this.points = new FunctionPoint[capacity];
-        System.arraycopy(points, 0, this.points, 0, pointsCount_);
-        leftX_ = points[0].getX();
-        rightX_ = points[pointsCount_ - 1].getX();
+        for (int i = 0; i < pointsCount_; i++) {
+            this.points[i] = new FunctionPoint(points[i]);
+        }
+        leftX_ = this.points[0].getX();
+        rightX_ = this.points[pointsCount_ - 1].getX();
     }
 
     public double getLeftDomainBorder() {
