@@ -123,7 +123,7 @@ class Lab4 {
                     Functions.power(tabulatedCos, 2)
             );
 
-            System.out.println("x\t\tsin²(x)+cos²(x)");
+            System.out.println("x\t\tsin^2(x)+cos^2(x)");
             for (double x = 0; x <= Math.PI; x += 0.1) {
                 double result = sumOfSquares.getFunctionValue(x);
                 System.out.printf("%.1f\t\t%.8f%n", x, result);

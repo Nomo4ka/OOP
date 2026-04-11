@@ -36,6 +36,10 @@ public class LinkedListTabulatedFunctionExternalizable
             throw new IOException("Табулированная функция должна содержать минимум 2 точки");
         }
 
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+
         for (int i = 0; i < count; i++) {
             double x = in.readDouble();
             double y = in.readDouble();

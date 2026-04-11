@@ -213,6 +213,10 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
     }
     //------------------------------------------------------
     private FunctionNode getNodeByIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
+        }
+
         if (index < size / 2) {
             FunctionNode p = head;
             for (int i = 0; i < index; i++) {
@@ -221,7 +225,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
             return p;
         } else {
             FunctionNode p = tail;
-            for (int i = size ; i > index ; --i) {
+            for (int i = size - 1; i > index; --i) {
                 p = p.prev;
             }
             return p;
