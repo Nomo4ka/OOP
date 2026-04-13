@@ -1,6 +1,7 @@
 package functions;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 
 public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     
@@ -238,5 +239,57 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof TabulatedFunction))
+            return false;
+
+        if (obj instanceof TabulatedFunction) {
+            TabulatedFunction other = (TabulatedFunction) obj;
+
+            if (this.pointsCount_ != other.getPointsCount())
+                return false;
+
+            for (int i = 0; i < pointsCount_; i++) {
+                if (!this.points[i].equals(other.getPoint(i)))
+                    return false;
+            }
+        }
+
+        if (obj instanceof ArrayTabulatedFunction) {
+            ArrayTabulatedFunction other = (ArrayTabulatedFunction) obj;
+
+            if (this.pointsCount_ != other.pointsCount_)
+                return false;
+
+            for (int i = 0; i < pointsCount_; i++) {
+                if (!this.points[i].equals(other.points[i]))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public TabulatedFunction clone() {
+        FunctionPoint[] copiedPoints = new FunctionPoint[pointsCount_];
+        for (int i = 0; i < pointsCount_; i++) {
+            copiedPoints[i] = new FunctionPoint(points[i]);
+        }
+        return new ArrayTabulatedFunction(copiedPoints);
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = pointsCount_;
+        for (int i = 0; i < pointsCount_; i++) {
+            hash ^= points[i].hashCode();
+        }
+        return hash;
     }
 }

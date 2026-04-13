@@ -343,11 +343,10 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
     public String toString() {
         StringBuilder sb = new StringBuilder("Tabulated Func:[");
         FunctionNode point = head.next;
-        for (int i = 0; i  < size; i++) {
+        for (int i = 0; i < size; i++) {
             if (i == 0) {
                 sb.append(head.toString());
-            }
-            else {
+            } else {
                 sb.append(point.toString());
                 point = point.next;
             }
@@ -357,5 +356,70 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         }
         sb.append("]");
         return sb.toString();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof TabulatedFunction))
+            return false;
+
+        if (obj instanceof LinkedListTabulatedFunction) {
+            LinkedListTabulatedFunction other = (LinkedListTabulatedFunction) obj;
+
+            if (this.size != other.size)
+                return false;
+
+            FunctionNode node1 = this.head;
+            FunctionNode node2 = other.head;
+
+            while (node1 != null) {
+                if (!node1.p.equals(node2.p))
+                    return false;
+                node1 = node1.next;
+                node2 = node2.next;
+            }
+
+            return true;
+        }
+
+        TabulatedFunction other = (TabulatedFunction) obj;
+        if (this.size != other.getPointsCount())
+            return false;
+
+        FunctionNode node = this.head;
+        for (int i = 0; i < size; i++) {
+            if (!node.p.equals(other.getPoint(i)))
+                return false;
+            node = node.next;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = size;
+        FunctionNode node = head;
+
+        while (node != null) {
+            hash = 31 * hash + node.p.hashCode();
+            node = node.next;
+        }
+
+        return hash;
+    }
+
+    @Override
+    public TabulatedFunction clone() {
+        LinkedListTabulatedFunction cloned = new LinkedListTabulatedFunction();
+        FunctionNode node = this.head;
+        while (node != null) {
+            cloned.addNodeToTail(new FunctionPoint(node.p));
+            node = node.next;
+        }
+        return cloned;
     }
 }
