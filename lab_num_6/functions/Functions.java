@@ -30,4 +30,24 @@ public class Functions {
     public static Function composition(Function f1, Function f2) {
         return new Composition(f1, f2);
     }
+
+    public static double Integral(Function f, double a, double b, double h) throws Exception {
+        if (a < f.getLeftDomainBorder() || b > f.getRightDomainBorder()) {
+            throw new Exception("Область интегрирования выходит за пределы определения функции!");
+        }
+        
+        double Sum = 0.0;
+        double x = a;
+        while (x + h < b) {
+            double x2 = x + h;
+            Sum += (f.getFunctionValue(x) + f.getFunctionValue(x2)) * h / 2.0;
+            x = x2;
+        }
+        
+        if (x < b) {
+            Sum += (f.getFunctionValue(x) + f.getFunctionValue(b)) * (b - x) / 2.0;
+        }
+
+        return Sum;
+    }
 }
