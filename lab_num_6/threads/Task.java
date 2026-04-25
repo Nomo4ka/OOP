@@ -2,7 +2,6 @@ package threads;
 import functions.*;
 
 public class Task {
-
     private Function f;
     private double a;
     private double b;

@@ -1,5 +1,4 @@
 import java.util.Random;
-
 import functions.*;
 import functions.basic.Exp;
 import functions.basic.Log;
