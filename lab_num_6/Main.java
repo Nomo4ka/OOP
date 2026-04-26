@@ -76,10 +76,11 @@ public class Main {
     
     private static void simpleThreads() {
         Task task = new Task(100);
+        Semaphor semaphor = new Semaphor();
         
         // Создание потоков генератора и интегратора
-        Thread generatorThread = new Thread(new SimpleGenerator(task));
-        Thread integratorThread = new Thread(new SimpleIntegrator(task));
+        Thread generatorThread = new Thread(new SimpleGenerator(task, semaphor));
+        Thread integratorThread = new Thread(new SimpleIntegrator(task, semaphor));
 
         // Настройка приоритетов потоков
         generatorThread.setPriority(Thread.MAX_PRIORITY);

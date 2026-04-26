@@ -1,5 +1,7 @@
 package threads;
+
 import functions.*;
+import functions.basic.*;
 
 public class Task {
     private Function f;
@@ -18,6 +20,10 @@ public class Task {
 
     public Task(int taskCount) {
         this.taskCount = taskCount;
+        this.f = new Log(2.0);
+        this.a = 1.0;
+        this.b = 2.0;
+        this.h = 0.1;
     }
     
     public Function getFunction() {
