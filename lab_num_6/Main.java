@@ -1,105 +1,135 @@
-import java.util.Random;
 import functions.*;
 import functions.basic.Exp;
 import functions.basic.Log;
 import threads.*;
 
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args) {
-        //testIntegral();
-        //nonThread();    
-        simpleThreads();
-    }   
+        System.out.println("ЗАДАНИЕ 1: ПРОВЕРКА МЕТОДА ИНТЕГРИРОВАНИЯ");
+        testIntegration();
 
-    public static void testIntegral() {
-        Function exp = new Exp();
-        double exact = Math.exp(1) - 1; // Точное значение интеграла от exp(x) на [0, 1]
+        System.out.println("\nЗАДАНИЕ 2: ПОСЛЕДОВАТЕЛЬНОЕ ВЫПОЛНЕНИЕ");
+        nonThread();
+
+        System.out.println("\nЗАДАНИЕ 3: ПРОСТЫЕ ПОТОКИ");
+        simpleThreads();
+
+        System.out.println("\nЗАДАНИЕ 4: ПОТОКИ THREAD + SEMAPHOR");
+        complicatedThreads();
+    }
+
+    private static void testIntegration() {
+        Exp exp = new Exp();
+
+        double leftBorder = 0.0;
+        double rightBorder = 1.0;
+        double theoreticalValue = Math.E - 1.0;
+        double step = 0.1;
+
+        System.out.println("Интегрирование exp(x) на [0, 1]");
+        System.out.printf("Теоретическое значение: %.9f%n", theoreticalValue);
 
         try {
-            double h = 0.1;
-            double value = Functions.Integral(exp, 0.0, 1.0, h);
-
-            System.out.println("Теоретическое значение: " + exact);
-            System.out.println("Численное значение (h = " + h + "): " + value);
-            System.out.println("Погрешность: " + Math.abs(exact - value));
-
-            double step = 0.1;
             while (true) {
-                double approx = Functions.Integral(exp, 0.0, 1.0, step);
-                double error = Math.abs(exact - approx);
+                double calculatedValue = Functions.Integral(exp, leftBorder, rightBorder, step);
+                double error = Math.abs(calculatedValue - theoreticalValue);
+
+                System.out.printf(
+                        "Шаг %.8f: вычислено=%.9f, ошибка=%.2e%n",
+                        step, calculatedValue, error
+                );
 
                 if (error < 1e-7) {
-                    System.out.println("Шаг для точности до 7-го знака после запятой: " + step);
-                    System.out.println("Приближенное значение: " + approx);
-                    System.out.println("Погрешность: " + error);
+                    System.out.println("Точность 1e-7 достигнута при шаге: " + step);
                     break;
                 }
 
                 step /= 2.0;
             }
-
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Ошибка интегрирования: " + e.getMessage());
         }
     }
-    
+
     private static void nonThread() {
-        try {
-            Task task = new Task(10); // 10 заданий
-            Random random = new Random();
+        Task task = new Task(100);
+        Random random = new Random();
 
-            System.out.println("Последовательное выполнение " + task.getTaskCount() + " интегралов:");
-            System.out.println("Формат: leftX rightX step result");
+        System.out.println("Последовательное выполнение " + task.getTaskCount() + " интегралов:");
+        System.out.println("Формат: leftX rightX step result");
 
-            for (int i = 0; i < task.getTaskCount(); i++) {
-                // Генерация случайных параметров
-                double base = 1.1 + random.nextDouble() * 8.9; // основание логарифма [1.1, 10]
-                task.setFunction(new Log(base));
-                task.setLeftX(random.nextDouble() * 100); // левая граница [0, 100]
-                task.setRightX(100 + random.nextDouble() * 100); // правая граница [100, 200]
-                task.setStep(0.001 + random.nextDouble() * 0.999); // шаг [0.001, 1]
+        for (int i = 0; i < task.getTaskCount(); i++) {
+            double base = 1.1 + random.nextDouble() * 8.9;
 
-                System.out.printf("Исходные: %.4f %.4f %.4f%n",
-                        task.getLeftX(), task.getRightX(), task.getStep());
+            task.setFunction(new Log(base));
+            task.setLeftX(1 + random.nextDouble() * 99);
+            task.setRightX(100 + random.nextDouble() * 100);
+            task.setStep(0.001 + random.nextDouble() * 0.999);
 
-                // Последовательное вычисление интеграла
-                double result = Functions.Integral(task.getFunction(), task.getLeftX(), task.getRightX(),
-                        task.getStep());
-                System.out.printf("Результат: %.4f %.4f %.4f %.6f%n",
-                        task.getLeftX(), task.getRightX(), task.getStep(), result);
+            try {
+                double result = Functions.Integral(
+                        task.getFunction(),
+                        task.getLeftX(),
+                        task.getRightX(),
+                        task.getStep()
+                );
+
+                System.out.printf(
+                        "Результат: %.4f %.4f %.4f %.6f%n",
+                        task.getLeftX(),
+                        task.getRightX(),
+                        task.getStep(),
+                        result
+                );
+            } catch (Exception e) {
+                System.out.println("Ошибка: " + e.getMessage());
             }
-            System.out.println();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
-    
+
     private static void simpleThreads() {
         Task task = new Task(100);
-        Semaphor semaphor = new Semaphor();
-        
-        // Создание потоков генератора и интегратора
-        Thread generatorThread = new Thread(new SimpleGenerator(task, semaphor));
-        Thread integratorThread = new Thread(new SimpleIntegrator(task, semaphor));
 
-        // Настройка приоритетов потоков
-        generatorThread.setPriority(Thread.MAX_PRIORITY);
-        integratorThread.setPriority(Thread.MIN_PRIORITY);
-        System.out.println("Запуск простых потоков (Generator: NORM_PRIORITY, Integrator: MAX_PRIORITY)");
+        Thread generatorThread = new Thread(new SimpleGenerator(task));
+        Thread integratorThread = new Thread(new SimpleIntegrator(task));
 
-        // Запуск потоков
+        generatorThread.setPriority(Thread.NORM_PRIORITY);
+        integratorThread.setPriority(Thread.MAX_PRIORITY);
+
+        System.out.println("Запуск простых потоков");
+
         generatorThread.start();
         integratorThread.start();
 
-        // Ожидание завершения потоков
         try {
             generatorThread.join();
             integratorThread.join();
-            System.out.println("✅ Простые потоки завершили работу");
+            System.out.println("Простые потоки завершили работу");
         } catch (InterruptedException e) {
-            System.err.println("Ошибка ожидания потоков: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Ошибка ожидания потоков: " + e.getMessage());
         }
-        System.out.println();
+    }
+
+    private static void complicatedThreads() {
+        Task task = new Task(100);
+        Semaphor semaphor = new Semaphor();
+
+        Generator generator = new Generator(task, semaphor);
+        Integrator integrator = new Integrator(task, semaphor);
+
+        System.out.println("Запуск потоков Generator и Integrator");
+
+        generator.start();
+        integrator.start();
+
+        try {
+            generator.join();
+            integrator.join();
+            System.out.println("Потоки Generator и Integrator завершили работу");
+        } catch (InterruptedException e) {
+            System.out.println("Ошибка ожидания потоков: " + e.getMessage());
+        }
     }
 }

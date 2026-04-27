@@ -2,11 +2,13 @@ package threads;
 
 import functions.*;
 
-public class SimpleIntegrator implements Runnable {
+public class Integrator extends Thread {
     private Task ts;
+    private Semaphor semaphor;
 
-    public SimpleIntegrator(Task ts) {
+    public Integrator(Task ts, Semaphor semaphor) {
         this.ts = ts;
+        this.semaphor = semaphor;
     }
 
     @Override
@@ -16,21 +18,23 @@ public class SimpleIntegrator implements Runnable {
             double leftX;
             double rightX;
             double step;
-            
-            synchronized (ts) {
 
-                f = ts.getFunction();
-                leftX = ts.getLeftX();
-                rightX = ts.getRightX();
-                step = ts.getStep();
-            }
+            semaphor.beginRead();
             
+            f = ts.getFunction();
+            leftX = ts.getLeftX();
+            rightX = ts.getRightX();
+            step = ts.getStep();
+
+            semaphor.endRead();
+
             try {
-                double result = Functions.Integral(f, leftX, rightX, step);
+                double result = functions.Functions.Integral(f, leftX, rightX, step);
                 System.out.println("Результат задачи " + (i + 1) + ": " + result);
             } catch (Exception e) {
                 System.out.println("Ошибка в задаче " + (i + 1) + ": " + e.getMessage());
             }
         }
     }
+
 }

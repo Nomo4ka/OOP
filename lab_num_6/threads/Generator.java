@@ -2,11 +2,13 @@ package threads;
 
 import functions.basic.*;
 
-public class SimpleGenerator implements Runnable {
+public class Generator extends Thread {
     private Task ts;
+    private Semaphor semaphor;
 
-    public SimpleGenerator(Task ts) {
+    public Generator(Task ts, Semaphor semaphor) {
         this.ts = ts;
+        this.semaphor = semaphor;
     }
 
     @Override
@@ -16,18 +18,20 @@ public class SimpleGenerator implements Runnable {
             double leftX = Math.random() * 100;
             double rightX = 100 + Math.random() * 100;
             double step = 0.001 + Math.random() * 0.9;
-
-            synchronized (ts) {
-                ts.setFunction(new Log(base));
-                ts.setLeftX(leftX);
-                ts.setRightX(rightX);
-                ts.setStep(step);
-            }
             
+            semaphor.beginWrite();
+            
+            ts.setFunction(new Log(base));
+            ts.setLeftX(leftX);
+            ts.setRightX(rightX);
+            ts.setStep(step);
+
             System.out.printf(
                 "Сгенерирована задача %d: leftX=%.4f rightX=%.4f step=%.4f base=%.4f%n",
                 i + 1, leftX, rightX, step, base
             );
+            semaphor.endWrite();
         }
     }
+
 }

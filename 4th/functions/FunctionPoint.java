@@ -54,6 +54,7 @@ public class FunctionPoint implements Serializable, Cloneable {
         return xHash ^ yHash;
     }
 
+
     @Override
     public FunctionPoint clone() {
         return new FunctionPoint(this);

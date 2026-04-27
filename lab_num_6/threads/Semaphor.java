@@ -1,6 +1,7 @@
 package threads;
 
 public class Semaphor {
+    public  Semaphor(){}
     private boolean isAvailable = false;
 
     public synchronized void beginWrite() {
