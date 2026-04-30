@@ -1,6 +1,8 @@
 package functions;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedListTabulatedFunction implements TabulatedFunction, Serializable {
     
@@ -421,5 +423,27 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
             node = node.next;
         }
         return cloned;
+    }
+
+    @Override
+    public Iterator<FunctionPoint> iterator() {
+        return new Iterator<FunctionPoint>() {
+            private FunctionNode current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public FunctionPoint next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException("Нет больше элементов для итерации!");
+                }
+                FunctionPoint point = new FunctionPoint(current.p);
+                current = current.next;
+                return point;
+            }
+        };
     }
 }

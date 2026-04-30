@@ -1,6 +1,8 @@
 package functions;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     
@@ -290,5 +292,25 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
             hash ^= points[i].hashCode();
         }
         return hash;
+    }
+
+    @Override
+    public Iterator<FunctionPoint> iterator() {
+        return new Iterator<FunctionPoint>() {
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < pointsCount_;
+            }
+
+            @Override
+            public FunctionPoint next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException("Нет больше точек для итерации!");
+                }
+                return new FunctionPoint(points[currentIndex++]);
+            }
+        };
     }
 }
