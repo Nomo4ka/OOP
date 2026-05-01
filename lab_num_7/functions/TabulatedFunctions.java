@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class TabulatedFunctions {
 
@@ -106,7 +108,7 @@ public class TabulatedFunctions {
     
     private static TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
 
-    static void setTabulatedFunctionFactory(TabulatedFunctionFactory factory) {
+    public static void setTabulatedFunctionFactory(TabulatedFunctionFactory factory) {
         TabulatedFunctions.factory = factory;
     }
 
@@ -120,6 +122,66 @@ public class TabulatedFunctions {
 
     public static TabulatedFunction createTabulatedFunction(double leftX, double rightX, int pointsCount) {
         return factory.createTabulatedFunction(leftX, rightX, pointsCount);
+    }
+
+    public static TabulatedFunction createTabulatedFunction(
+            Class<? extends TabulatedFunction> functionClass,
+            double leftX,
+            double rightX,
+            double[] values) {
+        return createTabulatedFunctionByClass(
+                functionClass,
+                new Class<?>[] { double.class, double.class, double[].class },
+                leftX,
+                rightX,
+                values);
+    }
+
+    public static TabulatedFunction createTabulatedFunction(
+            Class<? extends TabulatedFunction> functionClass,
+            FunctionPoint[] points) {
+        return createTabulatedFunctionByClass(
+                functionClass,
+                new Class<?>[] { FunctionPoint[].class },
+                (Object) points);
+    }
+
+    public static TabulatedFunction createTabulatedFunction(
+            Class<? extends TabulatedFunction> functionClass,
+            double leftX,
+            double rightX,
+            int pointsCount) {
+        return createTabulatedFunctionByClass(
+                functionClass,
+                new Class<?>[] { double.class, double.class, int.class },
+                leftX,
+                rightX,
+                pointsCount);
+    }
+
+    private static TabulatedFunction createTabulatedFunctionByClass(
+            Class<? extends TabulatedFunction> functionClass,
+            Class<?>[] parameterTypes,
+            Object... args) {
+        if (functionClass == null) {
+            throw new NullPointerException("Function class is null");
+        }
+
+        try {
+            Constructor<? extends TabulatedFunction> constructor = functionClass.getConstructor(parameterTypes);
+            return constructor.newInstance(args);
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            }
+            if (cause instanceof Error) {
+                throw (Error) cause;
+            }
+            throw new IllegalArgumentException("Cannot create tabulated function", cause);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalArgumentException("Cannot create tabulated function", e);
+        }
     }
 
 }
