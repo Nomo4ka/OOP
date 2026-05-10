@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 
 public class TabulatedFunctions {
 
@@ -33,6 +32,27 @@ public class TabulatedFunctions {
             points[i] = new FunctionPoint(x, y);            
         }
         return createTabulatedFunction(points);
+    }
+
+    public static TabulatedFunction tabulate(
+            Class<? extends TabulatedFunction> functionClass,
+            Function function,
+            double leftX,
+            double rightX,
+            int pointsCount) {
+        if(leftX < function.getLeftDomainBorder() || rightX > function.getRightDomainBorder() ){
+            throw new IllegalArgumentException("Р“СЂР°РЅРёС†С‹ С‚Р°Р±СѓР»РёСЂРѕРІР°РЅРёСЏ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІРЅСѓС‚СЂРё РѕР±Р»Р°СЃС‚Рё РѕРїСЂРµРґРµР»РµРЅРёСЏ С„СѓРЅРєС†РёРё!");
+        }
+
+        double st = (rightX - leftX) / (pointsCount - 1);
+        FunctionPoint[] points = new FunctionPoint[pointsCount];
+
+        for (int i = 0; i < pointsCount; i++) {
+            double x  = leftX + st * i;
+            double y = function.getFunctionValue(x);
+            points[i] = new FunctionPoint(x, y);
+        }
+        return createTabulatedFunction(functionClass, points);
     }
 
     public static void outputTabulatedFunction(TabulatedFunction function, OutputStream out) throws java.io.IOException {
@@ -170,17 +190,8 @@ public class TabulatedFunctions {
         try {
             Constructor<? extends TabulatedFunction> constructor = functionClass.getConstructor(parameterTypes);
             return constructor.newInstance(args);
-        } catch (InvocationTargetException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof RuntimeException) {
-                throw (RuntimeException) cause;
-            }
-            if (cause instanceof Error) {
-                throw (Error) cause;
-            }
-            throw new IllegalArgumentException("Cannot create tabulated function", cause);
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException("Cannot create tabulated function", e);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 

@@ -7,22 +7,22 @@ import java.util.NoSuchElementException;
 public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     
     private FunctionPoint points[];
-    private int pointsCount_;
-    private double leftX_, rightX_;
+    private int pointsCount;
+    private double leftX, rightX;
     private int capacity;
 
     public ArrayTabulatedFunction(double leftX, double rightX, int pointsCount) {
         if (leftX >= rightX && pointsCount == 2) {
             throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
         }
-        leftX_ = leftX;
-        rightX_ = rightX;
-        pointsCount_ = pointsCount;
-        capacity = (pointsCount_ * 3)/2;
+        this.leftX = leftX;
+        this.rightX = rightX;
+        this.pointsCount = pointsCount;
+        capacity = (pointsCount * 3)/2;
         points = new FunctionPoint[capacity];
         
         double step = (rightX - leftX) / (pointsCount - 1);
-        for (int i = 0; i < pointsCount_; i++) {
+        for (int i = 0; i < pointsCount; i++) {
             FunctionPoint p = new FunctionPoint(leftX + i * step, 0);
             points[i] = p;
         } 
@@ -32,14 +32,14 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         if (leftX >= rightX && values.length == 2) {
             throw new IllegalArgumentException("Левая граница должна быть меньше правой!");
         }
-        leftX_ = leftX;
-        rightX_ = rightX;
-        pointsCount_ = values.length;
-        capacity = (pointsCount_ * 3) / 2;
+        this.leftX = leftX;
+        this.rightX = rightX;
+        this.pointsCount = values.length;
+        capacity = (pointsCount * 3) / 2;
         points = new FunctionPoint[capacity];
 
         double step = (rightX - leftX) / (values.length - 1);
-        for (int i = 0; i < pointsCount_; i++) {
+        for (int i = 0; i < pointsCount; i++) {
             FunctionPoint p = new FunctionPoint(leftX + i * step, values[i]);
             points[i] = p;
         }
@@ -56,17 +56,17 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
             }
         }
 
-        pointsCount_ = points.length;
-        capacity = (pointsCount_ * 3) / 2;
+        this.pointsCount = points.length;
+        capacity = (pointsCount * 3) / 2;
         if (capacity < 2) {
             capacity = 2;
         }
         this.points = new FunctionPoint[capacity];
-        for (int i = 0; i < pointsCount_; i++) {
+        for (int i = 0; i < pointsCount; i++) {
             this.points[i] = new FunctionPoint(points[i]);
         }
-        leftX_ = this.points[0].getX();
-        rightX_ = this.points[pointsCount_ - 1].getX();
+        this.leftX = this.points[0].getX();
+        this.rightX = this.points[pointsCount - 1].getX();
     }
 
     public double getLeftDomainBorder() {
@@ -74,12 +74,12 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     }
     
     public double getRightDomainBorder() {
-        return points[pointsCount_ - 1].getX();
+        return points[pointsCount - 1].getX();
     }
 
     public double getFunctionValue(double x) {
-        if (x >= leftX_ && x <= rightX_) {
-            for (int i = 0; i < pointsCount_ - 1; i++) {
+        if (x >= leftX && x <= rightX) {
+            for (int i = 0; i < pointsCount - 1; i++) {
                 FunctionPoint p1 = points[i];
                 FunctionPoint p2 = points[i + 1];
                 if (x >= p1.getX() && x <= p2.getX()) {
@@ -92,11 +92,11 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     }
 
     public int getPointsCount() {
-        return pointsCount_;
+        return pointsCount;
     }
 
     public FunctionPoint getPoint(int index) {
-        if (index < 0 || index >= pointsCount_) {
+        if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
         return new FunctionPoint(points[index]);
@@ -105,7 +105,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     public void setPoint(int index, FunctionPoint point)
             throws InappropriateFunctionPointException {
 
-        if (index < 0 || index >= pointsCount_) {
+        if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
@@ -113,21 +113,21 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
             throw new InappropriateFunctionPointException("Точка должна быть больше предыдущей!");
         }
 
-        if (index < pointsCount_ - 1 && point.getX() >= points[index + 1].getX()) {
+        if (index < pointsCount - 1 && point.getX() >= points[index + 1].getX()) {
             throw new InappropriateFunctionPointException("Точка должна быть меньше следующей!");
         }
 
         points[index] = new FunctionPoint(point);
 
         if (index == 0)
-            leftX_ = points[0].getX();
+            leftX = points[0].getX();
 
-        if (index == pointsCount_ - 1)
-            rightX_ = points[pointsCount_ - 1].getX();
+        if (index == pointsCount - 1)
+            rightX = points[pointsCount - 1].getX();
     }
     
     public double getPointX(int index) {
-        if (index < 0 || index >= pointsCount_) {
+        if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
@@ -136,7 +136,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     }
 
     public void setPointX(int index, double x) throws InappropriateFunctionPointException {
-        if (index < 0 || index >= pointsCount_) {
+        if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
@@ -144,7 +144,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
             throw new InappropriateFunctionPointException("x должен быть больше предыдущей точки!");
         }
 
-        if (index < pointsCount_ - 1 && x >= points[index + 1].getX()) {
+        if (index < pointsCount - 1 && x >= points[index + 1].getX()) {
             throw new InappropriateFunctionPointException("x должен быть меньше следующей точки!");
         }
 
@@ -153,15 +153,15 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         points[index].setX(x);
 
         if (index == 0) {
-            leftX_ = points[0].getX();
+            leftX = points[0].getX();
         }
-        if (index == pointsCount_ - 1) {
-            rightX_ = points[pointsCount_ - 1].getX();
+        if (index == pointsCount - 1) {
+            rightX = points[pointsCount - 1].getX();
         }
     }
 
     public double getPointY(int index) {
-        if (index < 0 || index >= pointsCount_) {
+        if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
         FunctionPoint p = points[index];
@@ -169,7 +169,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     }
     
     public void setPointY(int index, double y) {
-        if (index < 0 || index >= pointsCount_) {
+        if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
@@ -177,55 +177,55 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     }
 
     public void deletePoint(int index) {
-        if (index < 0 || index >= pointsCount_) {
+        if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Индекс вне допустимого диапазона!");
         }
 
-        if (pointsCount_ <= 2) {
+        if (pointsCount <= 2) {
             throw new IllegalStateException("Нельзя удалить точку — останется меньше 2 точек");
         }
 
-        System.arraycopy(points, index + 1, points, index, pointsCount_ - index - 1);
-        pointsCount_--;
+        System.arraycopy(points, index + 1, points, index, pointsCount - index - 1);
+        pointsCount--;
 
-        leftX_ = points[0].getX();
-        rightX_ = points[pointsCount_ - 1].getX();
+        leftX = points[0].getX();
+        rightX = points[pointsCount - 1].getX();
     }
 
     //arr = {{1,2},{2,3},{2.5,1},{3,4}}
     public void addPoint(FunctionPoint point) throws InappropriateFunctionPointException {
-        for (int i = 0; i < pointsCount_; i++) {
+        for (int i = 0; i < pointsCount; i++) {
             if (points[i].getX() == point.getX()) {
                 throw new InappropriateFunctionPointException("Абсцисса добавляемой точки уже существует");
             }
         }
 
         int index = rangeCheckForAdd(point.getX());
-        if (pointsCount_ == points.length)
+        if (pointsCount == points.length)
             points = grow(); 
 
-        System.arraycopy(points, index, points, index + 1, pointsCount_ - index);
+        System.arraycopy(points, index, points, index + 1, pointsCount - index);
 
         points[index] = point;
-        ++pointsCount_;
-        leftX_ = points[0].getX();
-        rightX_ = points[pointsCount_ - 1].getX();
-        // pointsCount_ = s + 1;
+        ++pointsCount;
+        leftX = points[0].getX();
+        rightX = points[pointsCount - 1].getX();
+        // pointsCount = s + 1;
     }
     
     private int rangeCheckForAdd(double x) {
-        for (int i = 0; i < pointsCount_; i++) {
+        for (int i = 0; i < pointsCount; i++) {
             if (x <= points[i].getX()) {
                 return i;
             }
         }
-        return pointsCount_;
+        return pointsCount;
     }
 
     private FunctionPoint[] grow() {
         int newcap = (capacity * 3) / 2;
         FunctionPoint[] newpPoints = new FunctionPoint[newcap];
-        System.arraycopy(points, 0, newpPoints, 0, pointsCount_);
+        System.arraycopy(points, 0, newpPoints, 0, pointsCount);
         capacity = newcap;
         return newpPoints;
     }
@@ -233,9 +233,9 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Tabulated Func:[");
-        for (int i = 0; i < pointsCount_; i++) {
+        for (int i = 0; i < pointsCount; i++) {
             sb.append(points[i].toString());
-            if (i < pointsCount_ - 1)
+            if (i < pointsCount - 1)
                 sb.append(", ");
         }
         sb.append("]");
@@ -253,10 +253,10 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         if (obj instanceof ArrayTabulatedFunction) {
             ArrayTabulatedFunction other = (ArrayTabulatedFunction) obj;
 
-            if (this.pointsCount_ != other.pointsCount_)
+            if (this.pointsCount != other.pointsCount)
                 return false;
 
-            for (int i = 0; i < pointsCount_; i++) {
+            for (int i = 0; i < pointsCount; i++) {
                 if (!this.points[i].equals(other.points[i]))
                     return false;
             }
@@ -265,10 +265,10 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         if (obj instanceof TabulatedFunction) {
             TabulatedFunction other = (TabulatedFunction) obj;
 
-            if (this.pointsCount_ != other.getPointsCount())
+            if (this.pointsCount != other.getPointsCount())
                 return false;
 
-            for (int i = 0; i < pointsCount_; i++) {
+            for (int i = 0; i < pointsCount; i++) {
                 if (!this.points[i].equals(other.getPoint(i)))
                     return false;
             }
@@ -278,8 +278,8 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
 
     @Override
     public TabulatedFunction clone() {
-        FunctionPoint[] copiedPoints = new FunctionPoint[pointsCount_];
-        for (int i = 0; i < pointsCount_; i++) {
+        FunctionPoint[] copiedPoints = new FunctionPoint[pointsCount];
+        for (int i = 0; i < pointsCount; i++) {
             copiedPoints[i] = new FunctionPoint(points[i]);
         }
         return new ArrayTabulatedFunction(copiedPoints);
@@ -287,8 +287,8 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     
     @Override
     public int hashCode() {
-        int hash = pointsCount_;
-        for (int i = 0; i < pointsCount_; i++) {
+        int hash = pointsCount;
+        for (int i = 0; i < pointsCount; i++) {
             hash ^= points[i].hashCode();
         }
         return hash;
@@ -301,7 +301,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
 
             @Override
             public boolean hasNext() {
-                return currentIndex < pointsCount_;
+                return currentIndex < pointsCount;
             }
 
             @Override
