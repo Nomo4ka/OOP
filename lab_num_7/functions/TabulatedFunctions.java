@@ -40,9 +40,10 @@ public class TabulatedFunctions {
             double leftX,
             double rightX,
             int pointsCount) {
-        if(leftX < function.getLeftDomainBorder() || rightX > function.getRightDomainBorder() ){
-            throw new IllegalArgumentException("Р“СЂР°РЅРёС†С‹ С‚Р°Р±СѓР»РёСЂРѕРІР°РЅРёСЏ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІРЅСѓС‚СЂРё РѕР±Р»Р°СЃС‚Рё РѕРїСЂРµРґРµР»РµРЅРёСЏ С„СѓРЅРєС†РёРё!");
+        if (leftX < function.getLeftDomainBorder() || rightX > function.getRightDomainBorder()) {
+            throw new IllegalArgumentException("Границы табулирования должны быть внутри области определения функции!");
         }
+
 
         double st = (rightX - leftX) / (pointsCount - 1);
         FunctionPoint[] points = new FunctionPoint[pointsCount];
@@ -86,6 +87,24 @@ public class TabulatedFunctions {
         return createTabulatedFunction(points);
     }
 
+    public static TabulatedFunction inputTabulatedFunction(
+            InputStream in,
+            TabulatedFunctionFactory factory) throws java.io.IOException {
+        DataInputStream dis = new DataInputStream(in);
+
+        int count = dis.readInt();
+        FunctionPoint[] points = new FunctionPoint[count];
+
+        for(int i = 0; i < count; i++) {
+            double x = dis.readDouble();
+            double y = dis.readDouble();
+            FunctionPoint newp = new FunctionPoint(x, y);
+            points[i] = newp;
+        }
+
+        return factory.createTabulatedFunction(points);
+    }
+
     public static void writeTabulatedFunction(TabulatedFunction function, Writer out) throws IOException {
         int count = function.getPointsCount();
         out.write(count + "\n");
@@ -112,6 +131,25 @@ public class TabulatedFunctions {
             points[i] = newp;
         }
         return createTabulatedFunction(points);
+    }
+
+    public static TabulatedFunction readTabulatedFunction(
+            Reader in,
+            TabulatedFunctionFactory factory) throws IOException {
+        StreamTokenizer tokenizer = new StreamTokenizer(new BufferedReader(in));
+        tokenizer.nextToken();
+        int count = (int) tokenizer.nval;
+        FunctionPoint[] points = new FunctionPoint[count];
+
+        for (int i = 0; i < count; i++) {
+            tokenizer.nextToken();
+            double x = tokenizer.nval;
+            tokenizer.nextToken();
+            double y = tokenizer.nval;
+            FunctionPoint newp = new FunctionPoint(x, y);
+            points[i] = newp;
+        }
+        return factory.createTabulatedFunction(points);
     }
 
     public static void serializeTabulatedFunction(TabulatedFunction function, OutputStream out) throws IOException {
@@ -142,6 +180,14 @@ public class TabulatedFunctions {
 
     public static TabulatedFunction createTabulatedFunction(double leftX, double rightX, int pointsCount) {
         return factory.createTabulatedFunction(leftX, rightX, pointsCount);
+    }
+
+    public static TabulatedFunction createTabulatedFunction(
+            Function function,
+            double leftX,
+            double rightX,
+            int pointsCount) {
+        return factory.createTabulatedFunction(function, leftX, rightX, pointsCount);
     }
 
     public static TabulatedFunction createTabulatedFunction(
